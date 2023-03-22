@@ -106,7 +106,6 @@ ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::ConfigDescParser(Usb
 template <const uint8_t CLASS_ID, const uint8_t SUBCLASS_ID, const uint8_t PROTOCOL_ID, const uint8_t MASK>
 void ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::Parse(const uint32_t len, const uint8_t *pbuf, const uint32_t &offset)
 {
-	TRACE_USBHOST(printf("CUSTOM PRINT (section 5) - PARSE FUNC CALLED w/ len = %lu\r\n", len);)
 	uint32_t	cntdn	= len;
 	uint8_t		*p		= (uint8_t*)pbuf;
 
@@ -131,7 +130,6 @@ void ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::Parse(const uin
 template <const uint8_t CLASS_ID, const uint8_t SUBCLASS_ID, const uint8_t PROTOCOL_ID, const uint8_t MASK>
 bool ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::ParseDescriptor(uint8_t **pp, uint32_t *pcntdn)
 {
-	TRACE_USBHOST(printf("CUSTOM PRINT (section 3) - RUNNING CONFIG PARSER w/ stateParseDescr = %lu\r\n", stateParseDescr);)
 	switch (stateParseDescr)
 	{
 		case 0:
@@ -141,7 +139,6 @@ bool ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::ParseDescriptor
 		case 1:
 			if (!valParser.Parse(pp, pcntdn))
 			{
-				TRACE_USBHOST(printf("CUSTOM PRINT (section 3) - FAIL POINT 1\r\n");)
 				return false;
 			}
 			dscrLen			= *((uint8_t*)theBuffer.pValue);
@@ -156,36 +153,29 @@ bool ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::ParseDescriptor
 			theBuffer.pValue	= varBuffer + 2;
 			stateParseDescr		= 3;
 		case 3:
-			TRACE_USBHOST(printf("CUSTOM PRINT (section 3) - pcntdn = %lu & dscrLen = %u & dscrType = %u\r\n", *pcntdn, dscrLen, dscrType);)
 			switch (dscrType)
 			{
 				case USB_DESCRIPTOR_INTERFACE:
 					isGoodInterface = false;
 					isAudioInterface = false;
-					TRACE_USBHOST(printf("CUSTOM PRINT (section 3) - INTERFACE_INT\r\n");)
 				case USB_DESCRIPTOR_CONFIGURATION:
 					theBuffer.valueSize = sizeof(USB_CONFIGURATION_DESCRIPTOR) - 2;
-					TRACE_USBHOST(printf("CUSTOM PRINT (section 3) - CONFIG_INT\r\n");)
 					break;
 				case USB_DESCRIPTOR_ENDPOINT:
 					theBuffer.valueSize = sizeof(USB_ENDPOINT_DESCRIPTOR) - (2*!isAudioInterface);
-					TRACE_USBHOST(printf("CUSTOM PRINT (section 3) - ENDPOINT_INT\r\n");)
 					break;
 				case HID_DESCRIPTOR_HID:
 					theBuffer.valueSize = dscrLen - 2;
-					TRACE_USBHOST(printf("CUSTOM PRINT (section 3) - HID_INT\r\n");)
 					break;
 			}
 			valParser.Initialize(&theBuffer);
 			stateParseDescr		= 4;
 		case 4:
-			TRACE_USBHOST(printf("CUSTOM PRINT (section 4) - State 4 w/ pcntdn = %lu\r\n", *pcntdn);)
 			switch (dscrType)
 			{
 				case USB_DESCRIPTOR_CONFIGURATION:
 					if (!valParser.Parse(pp, pcntdn))
 					{
-						TRACE_USBHOST(printf("CUSTOM PRINT (section 4) - FAIL POINT 2\r\n");)
 						return false;
 					}
 					confValue = ((USB_CONFIGURATION_DESCRIPTOR*)varBuffer)->bConfigurationValue;
@@ -193,7 +183,6 @@ bool ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::ParseDescriptor
 				case USB_DESCRIPTOR_INTERFACE:
 					if (!valParser.Parse(pp, pcntdn))
 					{
-						TRACE_USBHOST(printf("CUSTOM PRINT (section 4) - FAIL POINT 3\r\n");)
 						return false;
 					}
 
@@ -207,8 +196,6 @@ bool ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::ParseDescriptor
 					if ((MASK & CP_MASK_COMPARE_PROTOCOL) && ((USB_INTERFACE_DESCRIPTOR*)varBuffer)->bInterfaceProtocol != PROTOCOL_ID)
 						break;
 
-					TRACE_USBHOST(printf("CUSTOM PRINT (section 4) - PASSED INTERFACE CHECKS\r\n");)
-
 					isGoodInterface = true;
 					ifaceNumber = ((USB_INTERFACE_DESCRIPTOR*)varBuffer)->bInterfaceNumber;
 					ifaceAltSet = ((USB_INTERFACE_DESCRIPTOR*)varBuffer)->bAlternateSetting;
@@ -217,13 +204,11 @@ bool ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::ParseDescriptor
 				case USB_DESCRIPTOR_ENDPOINT:
 					if (!valParser.Parse(pp, pcntdn))
 					{
-						TRACE_USBHOST(printf("CUSTOM PRINT (section 4) - FAIL POINT 4\r\n");)
 						return false;
 					}
 					if (isGoodInterface)
 						if (theXtractor)
 						{
-						  TRACE_USBHOST(printf("CUSTOM PRINT (section 4) - SUCCESS\r\n");)
 							theXtractor->EndpointXtract(confValue, ifaceNumber, ifaceAltSet, protoValue, (USB_ENDPOINT_DESCRIPTOR*)varBuffer);
 						}
 					break;
@@ -233,13 +218,10 @@ bool ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::ParseDescriptor
 				//	PrintHidDescriptor((const USB_HID_DESCRIPTOR*)varBuffer);
 				//	break;
 				default:
-					TRACE_USBHOST(printf("CUSTOM PRINT (section 6) - PRE-SKIPPER w/ pcntdn = %lu\r\n", *pcntdn);)
 					if (!theSkipper.Skip(pp, pcntdn, dscrLen - 2))
 					  {
-						TRACE_USBHOST(printf("CUSTOM PRINT (section 6) - SKIPPER w/ pcntdn = %lu\r\n", *pcntdn);)
 						return false;
 					  }
-					TRACE_USBHOST(printf("CUSTOM PRINT (section 6) - POST-SKIPPER w/ pcntdn = %lu\r\n", *pcntdn);)
 			}
 			theBuffer.pValue = varBuffer;
 			stateParseDescr = 0;

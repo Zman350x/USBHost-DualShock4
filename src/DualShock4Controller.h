@@ -1,5 +1,5 @@
-#ifndef JOYSTICK_CONTROLLER_H
-#define JOYSTICK_CONTROLLER_H
+#ifndef DUALSHOCK_CONTROLLER_H
+#define DUALSHOCK_CONTROLLER_H
 
 #include "hidboot.h"
 
@@ -8,8 +8,8 @@ enum Buttons {
 	TPAD = 2,
 	L1 = 4,
 	R1 = 8,
-	L2= 16,
-	R2= 32,
+	L2 = 16,
+	R2 = 32,
 	SHARE = 64,
 	OPTIONS = 128,
     L3 = 256,
@@ -22,12 +22,19 @@ enum Buttons {
 
 struct JOYSTICKINFO
 {
-  int8_t id;
+  uint8_t id;
 
-  int8_t leftStickX;
-  int8_t leftStickY;
-  int8_t rightStickX;
-  int8_t rightStickY;
+  union
+  {
+    struct
+    {
+      int8_t leftStickX;
+      int8_t leftStickY;
+      int8_t rightStickX;
+      int8_t rightStickY;
+    };;
+    int8_t axes[4];
+  };
 
   uint8_t dPad : 4;
   uint8_t square : 1;
@@ -52,18 +59,27 @@ struct JOYSTICKINFO
   uint8_t analogR2;
 };
 
-class JoystickController : public HIDReportParser
+class DualShock4Controller : public HIDReportParser
 {
 public:
-  JoystickController(USBHost &usb) : hostJoystick(&usb), previousButtonState(0) {
+  DualShock4Controller(USBHost &usb) : hostJoystick(&usb), previousButtonState(0), deadzone(0) {
     hostJoystick.SetReportParser(0, this);
   }
   virtual void Parse(HID *hid, bool is_rpt_id, uint32_t len, uint8_t *buf);
+  void setAxisDeadzone(int8_t new_deadzone);
+
   JOYSTICKINFO state;
+  int8_t dPadAxes[2];
   
 private:
   HIDBoot<0x00, HID_PROTOCOL_NONE> hostJoystick;
+
+  uint16_t isolateButtons(uint8_t * buf);
+  void alignAxes();
+  void formatDPad();
+
   uint16_t previousButtonState;
+  int8_t deadzone;
 };
 
 #endif
