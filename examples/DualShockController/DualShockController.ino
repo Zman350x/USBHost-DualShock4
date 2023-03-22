@@ -37,6 +37,8 @@ void buttonReleased(uint16_t buttons)
 
 void setup()
 {
+  dualshock.setAxisDeadzone(15);
+
   Serial.begin(115200);
   Serial.println("Program started");
   delay(200);
@@ -46,19 +48,23 @@ void loop()
 {
   usb.Task();
 
-  Serial.print("D Pad: ");
-  Serial.print((uint8_t) dualshock.state.dPad);
+  Serial.print("D Pad Direction: ");
+  Serial.print(dualshock.state.dPad);
+  Serial.print(" | D Pad X: ");
+  Serial.print(dualshock.dPadAxes[0]);
+  Serial.print(" | D Pad Y: ");
+  Serial.print(dualshock.dPadAxes[1]);
   Serial.print(" | Left X: ");
-  Serial.print((uint8_t) dualshock.state.leftStickX);
+  Serial.print(dualshock.state.leftStickX);
   Serial.print(" | Left Y: ");
-  Serial.print((uint8_t) dualshock.state.leftStickY);
+  Serial.print(dualshock.state.leftStickY);
   Serial.print(" | Right X: ");
-  Serial.print((uint8_t) dualshock.state.rightStickX);
+  Serial.print(dualshock.state.rightStickX);
   Serial.print(" | Right Y: ");
-  Serial.print((uint8_t) dualshock.state.rightStickY);
+  Serial.print(dualshock.state.rightStickY);
   Serial.print(" | Analog L2: ");
-  Serial.print((uint8_t) dualshock.state.analogL2);
+  Serial.print(dualshock.state.analogL2);
   Serial.print(" | Analog R2: ");
-  Serial.print((uint8_t) dualshock.state.analogR2);
-  Serial.println(" |");
+  Serial.print(dualshock.state.analogR2);
+  Serial.println();
 }
