@@ -1,4 +1,4 @@
-#include "JoystickController.h"
+#include "DualShock4Controller.h"
 
 extern "C" {
 void __joystickControllerEmptyCallback(uint16_t __) { }
@@ -37,25 +37,23 @@ uint16_t isolateButtons(uint8_t * buf)
   return ((buf[5] & 0b11110000) << 6) + (buf[6] << 2) + (buf[7] & 0b00000011);
 }
 
-void JoystickController::Parse(HID *hid, bool is_rpt_id, uint32_t len, uint8_t *buf)
+void DualShock4Controller::Parse(HID *hid, bool is_rpt_id, uint32_t len, uint8_t *buf)
 {
-  TRACE_USBHOST(printf("CUSTOM PRINT (section 9) - Parsed\r\n");)
-  //printBuffer(len, buf);
   memcpy(&state, buf, sizeof(state));
+
   uint16_t buttonState = isolateButtons(buf);
 
   uint16_t pressed = buttonState & (~previousButtonState);
   uint16_t released = (~buttonState) & previousButtonState;
+
   if (pressed)
   {
     buttonPressed(pressed);
   }
-    if (released)
+  if (released)
   {
     buttonReleased(released);
   }
-  //printBits(sizeof(buttons), &buttons);
-  //Serial.println(buttons);
 
   previousButtonState = buttonState;
 };

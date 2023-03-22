@@ -93,7 +93,6 @@ uint32_t HID::GetIdle(uint32_t iface, uint32_t report_id, uint8_t* dataptr)
  */
 uint32_t HID::SetIdle(uint32_t iface, uint32_t report_id, uint32_t duration)
 {
-	TRACE_USBHOST(printf("CUSTOM PRINT (section 7) - GetIdle w/ iface = %lu\r\n", iface);)
     return (pUsb->ctrlReq(bAddress, 0, bmREQ_HIDOUT, HID_REQUEST_SET_IDLE, report_id, duration, iface, 0x0000, 0x0000, NULL, NULL));
 }
 

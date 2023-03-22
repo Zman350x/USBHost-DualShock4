@@ -1,5 +1,5 @@
-#ifndef JOYSTICK_CONTROLLER_H
-#define JOYSTICK_CONTROLLER_H
+#ifndef DUALSHOCK_CONTROLLER_H
+#define DUALSHOCK_CONTROLLER_H
 
 #include "hidboot.h"
 
@@ -52,10 +52,10 @@ struct JOYSTICKINFO
   uint8_t analogR2;
 };
 
-class JoystickController : public HIDReportParser
+class DualShock4Controller : public HIDReportParser
 {
 public:
-  JoystickController(USBHost &usb) : hostJoystick(&usb), previousButtonState(0) {
+  DualShock4Controller(USBHost &usb) : hostJoystick(&usb), previousButtonState(0) {
     hostJoystick.SetReportParser(0, this);
   }
   virtual void Parse(HID *hid, bool is_rpt_id, uint32_t len, uint8_t *buf);
