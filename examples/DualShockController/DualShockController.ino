@@ -37,7 +37,7 @@ void buttonReleased(uint16_t buttons)
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial.println("Program started");
   delay(200);
 }
