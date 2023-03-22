@@ -1,0 +1,57 @@
+###################################################
+# Syntax Coloring Map For USBHost for DualShock 4
+###################################################
+
+###################################################
+# Datatypes (KEYWORD1)
+###################################################
+
+MouseController			KEYWORD1
+USBHost					KEYWORD1
+KeyboardController		KEYWORD1
+DualShock4Controller	KEYWORD1
+
+###################################################
+# Methods and Functions (KEYWORD2)
+###################################################
+
+Task					KEYWORD2
+mouseMoved				KEYWORD2
+mouseDragged			KEYWORD2
+mousePressed			KEYWORD2
+mouseReleased			KEYWORD2
+getXChange				KEYWORD2
+getYChange				KEYWORD2
+getButton				KEYWORD2
+keyPressed				KEYWORD2
+keyReleased				KEYWORD2
+getModifiers			KEYWORD2
+getKey					KEYWORD2
+getOemKey				KEYWORD2
+buttonPressed			KEYWORD2
+buttonReleased			KEYWORD2
+
+###################################################
+# Structures (KEYWORD3)
+###################################################
+
+state					KEYWORD3
+
+###################################################
+# Constants (LITERAL1)
+###################################################
+
+PS						LITERAL1
+TPAD					LITERAL1
+L1						LITERAL1
+R1						LITERAL1
+L2						LITERAL1
+R2						LITERAL1
+SHARE					LITERAL1
+OPTIONS					LITERAL1
+L3						LITERAL1
+R3						LITERAL1
+SQUARE					LITERAL1
+X						LITERAL1
+CIRCLE					LITERAL1
+TIRANGLE				LITERAL1
