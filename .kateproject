@@ -1,0 +1,4 @@
+{
+    "name": "USBHost-DualShock4",
+    "files": [ { "recursive": 1 } ]
+}

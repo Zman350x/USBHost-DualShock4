@@ -747,15 +747,11 @@ void USBHost::Task(void)
             break;
 	}
 
-	TRACE_USBHOST(printf("CUSTOM PRINT (section 10) - Pre poll loop\r\n");)
 	// Poll connected devices (if required)
 	for (uint32_t i = 0; i < USB_NUMDEVICES; ++i)
 		if (devConfig[i])
 		{
-
-			TRACE_USBHOST(printf("CUSTOM PRINT (section 10) - Pre poll call\r\n");)
 			rcode = devConfig[i]->Poll();
-			TRACE_USBHOST(printf("CUSTOM PRINT (section 10) - Post poll call\r\n");)
 		}
 
 	// Perform USB enumeration stage and clean up

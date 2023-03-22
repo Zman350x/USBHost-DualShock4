@@ -365,18 +365,10 @@ uint32_t HIDBoot<BOOT_SUBCLASS, BOOT_PROTOCOL>::Init(uint32_t parent, uint32_t p
 
 		rcode = pUsb->getConfDescr(bAddress, 0, i, &confDescrParser);
 
-		TRACE_USBHOST(printf("CUSTOM PRINT (section 1) - rcode is currently %lu\r\n", rcode);)
-		TRACE_USBHOST(printf("CUSTOM PRINT (section 1) - bNumEP is currently %lu\r\n", bNumEP);)
-
-		TRACE_USBHOST(printf("CUSTOM PRINT (section 1) - bConfNum is currently %lu\r\n", bConfNum);)				// configuration number
-		TRACE_USBHOST(printf("CUSTOM PRINT (section 1) - bIfaceNum is currently %lu\r\n", bIfaceNum);)				// Interface Number
-		TRACE_USBHOST(printf("CUSTOM PRINT (section 1) - bNumIface is currently %lu\r\n", bNumIface);)				// number of interfaces in the configuration
-
 		if (bNumEP > 1)
 			break;
 	}
 
-	TRACE_USBHOST(printf("CUSTOM PRINT (section 2) - bNumEP is currently %lu\r\n", bNumEP);)
 	if (bNumEP < 2)
 		return USB_DEV_CONFIG_ERROR_DEVICE_NOT_SUPPORTED;
 
@@ -529,12 +521,10 @@ uint32_t HIDBoot<BOOT_SUBCLASS, BOOT_PROTOCOL>::Release()
 template <const uint8_t BOOT_SUBCLASS, const uint8_t BOOT_PROTOCOL>
 uint32_t HIDBoot<BOOT_SUBCLASS, BOOT_PROTOCOL>::Poll()
 {
-	TRACE_USBHOST(printf("CUSTOM PRINT (section 8) - Polling\r\n");)
 	uint32_t rcode = 0;
 
 	if (!bPollEnable)
 	{
-		TRACE_USBHOST(printf("CUSTOM PRINT (section 8) - Disabled\r\n");)
 		return 0;
 	}
 
@@ -547,31 +537,18 @@ uint32_t HIDBoot<BOOT_SUBCLASS, BOOT_PROTOCOL>::Poll()
 
 		uint32_t read = epInfo[epInterruptInIndex].maxPktSize;
 
-		TRACE_USBHOST(printf("CUSTOM PRINT (section 8) - maxPktSize = %lu\r\n", read);)
-
 		rcode = pUsb->inTransfer(bAddress, epInfo[epInterruptInIndex].deviceEpNum, &read, buf);
-
-		/*for (uint8_t i = 0; i < const_buff_len; i++) {
-			TRACE_USBHOST(printf("CUSTOM PRINT (section 8) - BUFFER DUMP #%u: %u\r\n", i, buf[i]);)
-		}*/
 
 		if (rcode)
 		{
-			TRACE_USBHOST(printf("CUSTOM PRINT (section 8) - Transfer error w/ rcode = %lu\r\n", rcode);)
 			return rcode;
 		}
 
-		TRACE_USBHOST(printf("CUSTOM PRINT (section 8) - Post time check w/ pRptParser = %d\r\n", pRptParser);)
-
 		if (pRptParser)
 		{
-			TRACE_USBHOST(printf("CUSTOM PRINT (section 8) - pRptParser check passed\r\n");)
 			pRptParser->Parse((HID*)this, 0, (uint32_t)read, buf);
-			TRACE_USBHOST(printf("CUSTOM PRINT (section 8) - Post parse\r\n");)
 		}
 	}
-
-	TRACE_USBHOST(printf("CUSTOM PRINT (section 8) - Polling end w/ rcode = %lu\r\n", rcode);)
 
 	return rcode;
 }
