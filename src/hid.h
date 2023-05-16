@@ -154,6 +154,7 @@ class HIDReportParser
 {
 public:
 	virtual void Parse(HID *hid, bool is_rpt_id, uint32_t len, uint8_t *buf) = 0;
+	virtual void Disconnect();
 };
 
 #define MAX_REPORT_PARSERS					2

@@ -3,7 +3,8 @@
 
 #include "hidboot.h"
 
-enum Buttons {
+enum Buttons
+{
 	PS = 1,
 	TPAD = 2,
 	L1 = 4,
@@ -66,6 +67,7 @@ public:
     hostJoystick.SetReportParser(0, this);
   }
   virtual void Parse(HID *hid, bool is_rpt_id, uint32_t len, uint8_t *buf);
+  virtual void Disconnect();
   void setAxisDeadzone(int8_t new_deadzone);
 
   JOYSTICKINFO state;

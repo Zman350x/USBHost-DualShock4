@@ -523,6 +523,11 @@ uint32_t HIDBoot<BOOT_SUBCLASS, BOOT_PROTOCOL>::Poll()
 {
 	uint32_t rcode = 0;
 
+	if (pUsb->getUsbTaskState() == USB_DETACHED_SUBSTATE_INITIALIZE)
+	{
+		pRptParser->Disconnect();
+	}
+
 	if (!bPollEnable)
 	{
 		return 0;

@@ -7,6 +7,16 @@ void __joystickControllerEmptyCallback(uint16_t __) { }
 void buttonPressed(uint16_t buttons)  __attribute__ ((weak, alias("__joystickControllerEmptyCallback")));
 void buttonReleased(uint16_t buttons)  __attribute__ ((weak, alias("__joystickControllerEmptyCallback")));
 
+/*void printBuffer(uint32_t len, uint8_t *buf)
+{
+  for (uint8_t i = 0; i < 10; i++) {
+    if (buf[i] < 16) {Serial.print("0");}
+    Serial.print(buf[i], HEX);
+    Serial.print(" ");
+  }
+  Serial.println();
+}*/
+
 uint16_t DualShock4Controller::isolateButtons(uint8_t * buf)
 {
   return ((buf[5] & 0b11110000) << 6) + (buf[6] << 2) + (buf[7] & 0b00000011);
@@ -73,8 +83,21 @@ void DualShock4Controller::formatDPad()
   }
 }
 
+void DualShock4Controller::Disconnect()
+{
+  uint8_t off[sizeof(state)] = {0};
+  off[5] = 8;
+  memcpy(&state, &off, sizeof(state));
+  //printBuffer(sizeof(state), (uint8_t*) &state);
+
+  dPadAxes[0] = 0;
+  dPadAxes[1] = 0;
+}
+
 void DualShock4Controller::Parse(HID *hid, bool is_rpt_id, uint32_t len, uint8_t *buf)
 {
+  //printBuffer(len, buf);
+
   memcpy(&state, buf, sizeof(state));
   alignAxes();
   formatDPad();

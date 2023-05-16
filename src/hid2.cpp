@@ -17,6 +17,8 @@ e-mail   :  support@circuitsathome.com
 
 #include "hid.h"
 
+void HIDReportParser::Disconnect() {}
+
 /**
  * \brief Get HID report descriptor and parse it.
  *
