@@ -5,20 +5,20 @@
 
 enum Buttons
 {
-	PS = 1,
-	TPAD = 2,
-	L1 = 4,
-	R1 = 8,
-	L2 = 16,
-	R2 = 32,
-	SHARE = 64,
-	OPTIONS = 128,
-    L3 = 256,
-    R3 = 512,
-    SQUARE = 1024,
-    X = 2048,
-    CIRCLE = 4096,
-    TRIANGLE = 8192
+  PS = 1,
+  TPAD = 2,
+  L1 = 4,
+  R1 = 8,
+  L2 = 16,
+  R2 = 32,
+  SHARE = 64,
+  OPTIONS = 128,
+  L3 = 256,
+  R3 = 512,
+  SQUARE = 1024,
+  X = 2048,
+  CIRCLE = 4096,
+  TRIANGLE = 8192
 };
 
 struct JOYSTICKINFO
@@ -33,7 +33,7 @@ struct JOYSTICKINFO
       int8_t leftStickY;
       int8_t rightStickX;
       int8_t rightStickY;
-    };;
+    };
     int8_t axes[4];
   };
 
