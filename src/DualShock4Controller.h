@@ -18,7 +18,7 @@ enum Buttons
     SQUARE = 1024,
     X = 2048,
     CIRCLE = 4096,
-    TIRANGLE = 8192
+    TRIANGLE = 8192
 };
 
 struct JOYSTICKINFO
